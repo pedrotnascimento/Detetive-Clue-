@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import ctrl.Path;
+
 
 public class GamePlay extends JFrame{
 	static final int W = 800;
