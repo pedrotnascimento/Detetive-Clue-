@@ -1,5 +1,4 @@
-package detetive;
-
+package menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,48 +10,15 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import detetive.GamePlay;
 
-public class MenuStart extends JFrame{
-	public MenuStart(){
-		JPanel p = new JPanel();
-		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-		JButton startGame = new JButton("START");
-		JButton loadGame = new JButton("LOAD");
-		startGame.setAlignmentX(CENTER_ALIGNMENT);
-		loadGame.setAlignmentX(CENTER_ALIGNMENT);
-		
-		startGame.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Iniciar Jogo");
-				new SelectPlayer();
-			}
-		});
-		System.out.println(GamePlay.characters);
-		loadGame.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Jogo será carregado!");
-				
-			}
-		});
-		
-		
-		p.add(startGame);
-		p.add(loadGame);
-		add(p);
-		setVisible(true);
-		setSize(60, 120);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-
-
-}	
-class SelectPlayer extends JFrame{
-	public SelectPlayer(){
+/*
+ * Janela que permite a seleção dos jogadores
+ * Como esta janela é extensão do ínicio do jogo, foi mantido no mesmo modulo
+ */
+public class SelectPlayers extends JFrame{
+	public SelectPlayers(){
 		JPanel p =  new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		String [] players = GamePlay.characters;
@@ -65,12 +31,15 @@ class SelectPlayer extends JFrame{
 			p.add(cb);
 		}
 		JButton btnOK= new JButton("OK");
+		
+		//para retirar visibilidade ao escolher jogadores
+		JFrame self = this;
 		btnOK.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Jogadores selecionados, Iniciando Jogo");
 				new GamePlay(getSelecteds(lis_cb));
-//				(new GamePlay()).startGame(getSelecteds(lis_cb));
+				self.setVisible(false);
 				System.out.println("Jogo iniciado");
 			}
 		});
@@ -79,9 +48,11 @@ class SelectPlayer extends JFrame{
 		add(p);
 		setSize(90, 210);
 		setVisible(true);
-		
 	}
 	
+	/*
+	 * obtém uma ArrayList de nomes dos jogadores
+	 */
 	public ArrayList<String> getSelecteds(List<JCheckBox> players){
 		ArrayList<String> selecteds = new ArrayList<String>();
 		
@@ -92,6 +63,4 @@ class SelectPlayer extends JFrame{
 		}		
 		return  selecteds;
 	}
-	
-	
 }
