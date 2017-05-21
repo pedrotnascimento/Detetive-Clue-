@@ -1,5 +1,6 @@
 package menu;
 
+import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -9,7 +10,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import detetive.GamePlay;
 
@@ -37,10 +40,23 @@ public class SelectPlayers extends JFrame{
 		btnOK.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Jogadores selecionados, Iniciando Jogo");
-				new GamePlay(getSelecteds(lis_cb));
-				self.setVisible(false);
-				System.out.println("Jogo iniciado");
+				if(getNumSelected(lis_cb)<3){
+//					JFrame popUp =new PopupMenu("ESCOLHER PELO MENOS 3 PERSONAGENS");
+//					popUp.setSize(100, 100);
+//					popUp.setVisible(true);
+//					popUp.show(self, 0, 0);
+					JOptionPane.showMessageDialog(self,
+						    "Selecione pelo menos 3 jogadores",
+						    "Poucos jogadores",
+						    JOptionPane.PLAIN_MESSAGE);
+					
+				}
+				else{
+					System.out.println("Jogadores selecionados, Iniciando Jogo");
+					new GamePlay(getSelecteds(lis_cb));
+					self.setVisible(false);
+					System.out.println("Jogo iniciado");
+				}
 			}
 		});
 		p.add(btnOK);
@@ -53,14 +69,24 @@ public class SelectPlayers extends JFrame{
 	/*
 	 * obtém uma ArrayList de nomes dos jogadores
 	 */
-	public ArrayList<String> getSelecteds(List<JCheckBox> players){
+	public ArrayList<String> getSelecteds(List<JCheckBox> checkboxes){
 		ArrayList<String> selecteds = new ArrayList<String>();
 		
-		for(int i =0; i<players.size(); i++){
-			JCheckBox cb = players.get(i);
+		for(int i =0; i<checkboxes.size(); i++){
+			JCheckBox cb = checkboxes.get(i);
 			if(cb.isSelected())
 				selecteds.add(cb.getText());
 		}		
 		return  selecteds;
+	}
+	
+	public int getNumSelected(List<JCheckBox> checkboxes){
+		int num = 0;
+		for(int i = 0; i < checkboxes.size(); i++){
+			if(checkboxes.get(i).isSelected()){
+				num++;
+			}
+		}
+		return num;
 	}
 }
