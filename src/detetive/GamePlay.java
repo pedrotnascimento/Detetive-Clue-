@@ -49,8 +49,8 @@ public class GamePlay extends JFrame{
 			b.defineCell(c, 23, 19);
 		}
 		
-		
-		
+		Porta p1 = new Porta (Porta.DOWN,"cozinha", 4,7); 
+		b.defineCell(p1);
 //		new Path(b);
 		getContentPane().add(b);
 		setVisible(true);

@@ -41,15 +41,10 @@ public class SelectPlayers extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(getNumSelected(lis_cb)<3){
-//					JFrame popUp =new PopupMenu("ESCOLHER PELO MENOS 3 PERSONAGENS");
-//					popUp.setSize(100, 100);
-//					popUp.setVisible(true);
-//					popUp.show(self, 0, 0);
 					JOptionPane.showMessageDialog(self,
 						    "Selecione pelo menos 3 jogadores",
 						    "Poucos jogadores",
 						    JOptionPane.PLAIN_MESSAGE);
-					
 				}
 				else{
 					System.out.println("Jogadores selecionados, Iniciando Jogo");
@@ -82,11 +77,10 @@ public class SelectPlayers extends JFrame{
 	
 	public int getNumSelected(List<JCheckBox> checkboxes){
 		int num = 0;
-		for(int i = 0; i < checkboxes.size(); i++){
-			if(checkboxes.get(i).isSelected()){
+		for(int i = 0; i < checkboxes.size(); i++)
+			if(checkboxes.get(i).isSelected())
 				num++;
-			}
-		}
+				
 		return num;
 	}
 }

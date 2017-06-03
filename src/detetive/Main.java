@@ -14,7 +14,6 @@ public class Main {
 			"Plum"
 	};
 	 
-
 	public static void main(String[] args) {
 		GamePlay.setPlayers(players);
 		JFrame m = new MainMenu();

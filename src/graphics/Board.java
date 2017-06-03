@@ -43,4 +43,10 @@ public class Board extends JPanel{
 		cell.setBounds(x*sizeBoardCell + pos0_X, y*sizeBoardCell + pos0_Y, d.width, d.height);
 		add(cell);
 	}
+	public void defineCell(Cell cell){
+		Dimension d = cell.getPreferredSize();
+		
+		cell.setBounds(cell.x*sizeBoardCell + pos0_X, cell.y*sizeBoardCell + pos0_Y, d.width, d.height);
+		add(cell);
+	}
 }

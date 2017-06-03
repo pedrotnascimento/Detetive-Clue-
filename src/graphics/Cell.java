@@ -11,6 +11,8 @@ import javax.imageio.*;
 public class Cell extends JPanel{
 	public int width = 0;
 	public int height = 0;
+	public int x = 0;
+	public int y = 0;
 	String filename = "cell_test.png";
 	
 	public Cell(){
@@ -20,6 +22,14 @@ public class Cell extends JPanel{
 	public Cell(String filename){
 		this.filename = filename;
 	}
+	
+	public Cell(String filename, int x, int y){
+		this.filename = filename;
+		this.x =x;
+		this.y =y;
+		setPosition(x, y);
+	}
+	
 
 	
 	public void paintComponent(Graphics g){
