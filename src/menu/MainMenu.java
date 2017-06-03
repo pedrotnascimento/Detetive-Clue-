@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import detetive.GamePlay;
 
+import graphics.Dado;
 public class MainMenu extends JFrame{
 	/*
 	 * menu com opções de ínicio e término de jogo

@@ -50,6 +50,7 @@ public class SelectPlayers extends JFrame{
 					System.out.println("Jogadores selecionados, Iniciando Jogo");
 					new GamePlay(getSelecteds(lis_cb));
 					self.setVisible(false);
+					new Controller();
 					System.out.println("Jogo iniciado");
 				}
 			}

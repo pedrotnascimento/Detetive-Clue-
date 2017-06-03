@@ -25,28 +25,28 @@ public class GamePlay extends JFrame{
 		
 		b.setLayout(null);
 		if(players.contains(characters[0])){
-			Cell c = new Cell (characters[0]);
-			b.defineCell(c, 7, 24);
+			Char c = new Char (characters[0], 7, 24);
+			b.defineCell(c);
 		}
 		if(players.contains(characters[1])){
-			Cell c = new Cell (characters[1]);
-			b.defineCell(c, 0, 17);
+			Char c = new Char (characters[1],  0, 17);
+			b.defineCell(c);
 		}
 		if(players.contains(characters[2])){
-			Cell c = new Cell (characters[2]);
-			b.defineCell(c, 9, 0);
+			Char c = new Char (characters[2], 9, 0);
+			b.defineCell(c);
 		}
 		if(players.contains(characters[3])){
-			Cell c = new Cell (characters[3]);
-			b.defineCell(c, 14, 0 );
+			Char c = new Char (characters[3],14, 0 );
+			b.defineCell(c );
 		}
 		if(players.contains(characters[4])){
-			Cell c = new Cell (characters[4]);
-			b.defineCell(c, 23, 6);
+			Char c = new Char (characters[4], 23, 6);
+			b.defineCell(c);
 		}
 		if(players.contains(characters[5])){
-			Cell c = new Cell (characters[5]);
-			b.defineCell(c, 23, 19);
+			Char c = new Char (characters[5], 23, 19);
+			b.defineCell(c);
 		}
 		
 		Porta p1 = new Porta (Porta.UP,"cozinha", 4,7); 

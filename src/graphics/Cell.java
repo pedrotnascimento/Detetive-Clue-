@@ -53,5 +53,7 @@ public class Cell extends JPanel{
 		Dimension d = this.getPreferredSize();
 		this.setBounds(x, y, d.width, d.height);
 	}
+	
+	
 
 }
