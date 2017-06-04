@@ -12,7 +12,6 @@ public class Char extends Cell{
 		this.x = x;
 		this.y = y;
 		this.nome = nome;
-		System.out.printf("%d %d", x,y);
 		
 	}
 	
@@ -42,15 +41,8 @@ public class Char extends Cell{
 			setPosition(x, y);
 			break;
 		}
-		System.out.println(y);
 		
 		return true;
-	}
-	
-	public void setMove(int moves){
-		
-	}
-	
-	
+	}	
 	
 }

@@ -100,42 +100,54 @@ public class GamePlay extends JFrame implements KeyListener{
 	public void keyTyped(KeyEvent k){
 		int key = k.getKeyChar();
 		int dir = -1;
+		int KEY_SPACE = 32;
+//		System.out.println(key);
 		if(qtJogadas>0){
 			switch(key){
 			case 'w':
-				System.out.println("UP");
+//				System.out.println("UP");
 				dir = 0;
 				break;
 			case 'd':
-				System.out.println("R");
+//				System.out.println("R");
 				dir = 1;
 				break;
 			case 's':
-				System.out.println("D");
+//				System.out.println("D");
 				dir = 2;
 				break;
 			case 'a':
-				System.out.println("L");
+//				System.out.println("L");
 				dir = 3;
 				break;
 			}
 			int tempx = currPlayer.x;
 			int tempy = currPlayer.y;
+			int currTerrainType = path.isPath(tempx , tempy);
 			int terrainType = path.isPath(tempx,tempy,dir);
-			
-			if(dir!=-1 && terrainType==Path.FLOOR){
+			System.out.printf("prox %d   atual %d\n", terrainType, currTerrainType);
+			if(dir!=-1 && (terrainType==Path.FLOOR || terrainType==Path.DOOR)){
 				currPlayer.move(dir);
 				board.remove(currPlayer);
 				board.setCell(currPlayer);
 				qtJogadas-=1;
-				System.out.println(qtJogadas);
 				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
 				if(qtJogadas==0){
-					currPlayerInx = (currPlayerInx+1)%playersChars.size();
+//					currPlayerInx = (currPlayerInx+1)%playersChars.size();
 					currPlayer = playersChars.get(currPlayerInx);
 					currPlayerLabel.setText("Jogador: " + currPlayer.nome);
 					
 				}
+				revalidate();
+				repaint();
+			}
+			else if(dir!=-1 && terrainType==Path.ROOM && currTerrainType==Path.DOOR){
+				currPlayer.move(dir);
+				board.remove(currPlayer);
+				board.setCell(currPlayer);
+				qtJogadas=0;
+				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
+				
 				revalidate();
 				repaint();
 			}
