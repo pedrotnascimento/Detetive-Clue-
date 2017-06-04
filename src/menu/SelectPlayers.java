@@ -49,21 +49,10 @@ public class SelectPlayers extends JFrame{
 				}
 				else{
 					System.out.println("Jogadores selecionados, Iniciando Jogo");
-					Controller ctrl;
 					GamePlay gamePlay = new GamePlay(getSelecteds(lis_cb));
 					
 					self.setVisible(false);
-					ctrl = new Controller(gamePlay);
-//					ctrl.dadoViciado.addActionListener(new ActionListener() {
-//						
-//						@Override
-//						public void actionPerformed(ActionEvent e) {
-//							// TODO Auto-generated method stub
-//							System.out.println("1");
-//							gamePlay.setJogadas(ctrl.getDadoValue());
-//						}
-//					});
-					
+					Controller ctrl = new Controller(gamePlay);
 					System.out.println("Jogo iniciado");
 				}
 			}
