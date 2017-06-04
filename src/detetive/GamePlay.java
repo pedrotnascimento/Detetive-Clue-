@@ -1,5 +1,7 @@
 package detetive;
 import graphics.*;
+import menu.Controller;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -7,6 +9,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 
 
@@ -15,6 +18,9 @@ public class GamePlay extends JFrame implements KeyListener{
 	static final int H = 750;
 	Char curr_player = null;
 	public static String[] characters;
+	int qtJogadas;
+	JLabel ctrl;
+	
 	Board b;
 	
 	ArrayList<Char>playersChars= new ArrayList<Char>(); 
@@ -89,30 +95,39 @@ public class GamePlay extends JFrame implements KeyListener{
 	public void keyTyped(KeyEvent k){
 		int key = k.getKeyChar();
 		int dir = -1;
-		switch(key){
-		case 'w':
-			System.out.println("UP");
-			dir = 0;
-			break;
-		case 'd':
-			System.out.println("R");
-			dir = 1;
-			break;
-		case 's':
-			System.out.println("D");
-			dir = 2;
-			break;
-		case 'a':
-			System.out.println("L");
-			dir = 3;
-			break;
-		}
-
+		if(qtJogadas>0){
+			switch(key){
+			case 'w':
+				System.out.println("UP");
+				dir = 0;
+				break;
+			case 'd':
+				System.out.println("R");
+				dir = 1;
+				break;
+			case 's':
+				System.out.println("D");
+				dir = 2;
+				break;
+			case 'a':
+				System.out.println("L");
+				dir = 3;
+				break;
+			}
+		
+			if(dir!=-1){
 		curr_player.move(dir);
 		b.remove(curr_player);
 		b.setCell(curr_player);
+		qtJogadas-=1;
+		System.out.println(qtJogadas);
+		ctrl.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
+		
 		revalidate();
 		repaint();
+			}
+		
+		}
 		
 	}
 	
@@ -122,6 +137,14 @@ public class GamePlay extends JFrame implements KeyListener{
 	
 	public void keyReleased(KeyEvent k){
 //		System.out.println(k);
+	}
+	
+	public void setJogadas(int qt){
+		qtJogadas = qt;
+	}
+	
+	public void setController(JLabel ctrl){
+		this.ctrl = ctrl;
 	}
 
 }

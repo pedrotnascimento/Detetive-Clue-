@@ -1,47 +1,56 @@
 package menu;
 
-
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.text.html.HTMLEditorKit.Parser;
+
 
 import detetive.Dados;
+import detetive.GamePlay;
 
 public class Controller extends JFrame{
-	int dadoValue;
+	public Integer dadoValue;
 	JPanel dadoImage = null;
 	Dados dados = new Dados();
-	public Controller(){
+	public JLabel dadoViciadoLabel;
+	public JComboBox<String> dadoViciado; 
+	public Controller(GamePlay gamePlay){
+		
 		
 		JPanel p =  new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		JButton lancarDados = new JButton("DADOS");
 		lancarDados.setAlignmentX(CENTER_ALIGNMENT);
 		
-		JLabel dadoViciadoLabel = new JLabel("Dado Viciado");
+		dadoViciadoLabel = new JLabel("Dado Viciado");
 		dadoViciadoLabel.setAlignmentX(CENTER_ALIGNMENT);
+		
+
+		String[] dadosLis = {"1","2","3","4","5","6"};
+		dadoViciado = new JComboBox<String>(dadosLis);
+		dadoViciado.setAlignmentX(CENTER_ALIGNMENT);
+		
 		
 		JLabel jogadasLabel = new JLabel("Jogadas restantes: 0");
 		jogadasLabel.setAlignmentX(CENTER_ALIGNMENT);
 		
 		
 		
+		// COMUNICAO COM O JOGO
+		ActionListener aL = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gamePlay.setJogadas(getDadoValue());
+			}
+		};
 		
-		String[] dadosLis = {"1","2","3","4","5","6"};
-		JComboBox dadoViciado = new JComboBox(dadosLis);
-		dadoViciado.setAlignmentX(CENTER_ALIGNMENT);
-		
+		lancarDados.addActionListener(aL);
+		dadoViciado.addActionListener(aL);
 		
 		lancarDados.addActionListener(new ActionListener() {
 			@Override
@@ -60,12 +69,17 @@ public class Controller extends JFrame{
 			}
 		});
 		
+		
 		dadoViciado.addActionListener(new ActionListener() {
 			@Override	
 			public void actionPerformed(ActionEvent e) {
-				JComboBox m =(JComboBox) e.getSource();
+				System.out.println(2);
+				JComboBox<String> m =(JComboBox<String>) e.getSource();
 				String dadoValueStr =  (String) m.getSelectedItem();
 				dadoValue = Integer.valueOf(dadoValueStr);
+				jogadasLabel.setText("Jogadas restantes: "+ Integer.toString(dadoValue));
+				p.revalidate();
+				p.repaint();	
 			}
 		});
 		
@@ -78,6 +92,11 @@ public class Controller extends JFrame{
 		setVisible(true);
 		setBounds(800,0,120,300);
 		
-	}	
+		gamePlay.setController(jogadasLabel);
+	}
+	
+	public Integer getDadoValue(){
+		return dadoValue;
+	}
 	
 }
