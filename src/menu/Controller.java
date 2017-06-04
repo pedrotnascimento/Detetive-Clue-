@@ -75,7 +75,6 @@ public class Controller extends JFrame{
 		dadoViciado.addActionListener(new ActionListener() {
 			@Override	
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(2);
 				JComboBox<String> m =(JComboBox<String>) e.getSource();
 				String dadoValueStr =  (String) m.getSelectedItem();
 				dadoValue = Integer.valueOf(dadoValueStr);

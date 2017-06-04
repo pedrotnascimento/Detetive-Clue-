@@ -50,6 +50,8 @@ public class Cell extends JPanel{
 	}
 	
 	public void setPosition(int x, int y){
+		this.x = x;
+		this.y = y;
 		Dimension d = this.getPreferredSize();
 		this.setBounds(x, y, d.width, d.height);
 	}
