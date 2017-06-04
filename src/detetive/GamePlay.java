@@ -133,10 +133,23 @@ public class GamePlay extends JFrame implements KeyListener{
 				Room r = rooms[currRoom];	
 				r.qt-=1;
 				Exit exit = r.hasExit(1	);
-				currPlayer.setPosition(exit.saidaX, exit.saidaY);
-				currPlayer.room = Path.FLOOR;
-				board.remove(currPlayer);
-				board.setCell(currPlayer);
+				boolean hasPlayer = false;
+				for( int i =0; i < playersChars.size(); i++){
+					if(exit.saidaX == playersChars.get(i).x &&
+						exit.saidaY ==playersChars.get(i).y )
+							hasPlayer = true;
+				}
+				if(!hasPlayer){
+					currPlayer.setPosition(exit.saidaX, exit.saidaY);
+					currPlayer.room = Path.FLOOR;
+					board.remove(currPlayer);
+					board.setCell(currPlayer);
+					currPlayerInx = (currPlayerInx+1)%2;
+					currPlayer = playersChars.get(currPlayerInx);
+					currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+				}else{
+					System.out.println("ja tem jogador");
+				}
 				
 				revalidate();
 				repaint();
@@ -148,6 +161,10 @@ public class GamePlay extends JFrame implements KeyListener{
 					currPlayer.setPosition(secret.saidaX, secret.saidaY);
 					board.remove(currPlayer);
 					board.setCell(currPlayer);
+					qtJogadas=0;
+					currPlayerInx = (currPlayerInx+1)%2;
+					currPlayer = playersChars.get(currPlayerInx);
+					currPlayerLabel.setText("Jogador: " + currPlayer.nome);
 				}
 				
 				return;
@@ -168,6 +185,7 @@ public class GamePlay extends JFrame implements KeyListener{
 				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
 				if(qtJogadas==0){
 //					currPlayerInx = (currPlayerInx+1)%playersChars.size();
+					currPlayerInx = (currPlayerInx+1)%2;
 					currPlayer = playersChars.get(currPlayerInx);
 					currPlayerLabel.setText("Jogador: " + currPlayer.nome);
 				}
@@ -181,8 +199,13 @@ public class GamePlay extends JFrame implements KeyListener{
 				board.remove(currPlayer);
 				board.setCell(currPlayer);
 				qtJogadas=0;
-				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
 				currPlayer.room = terrainType;
+				currPlayerInx = (currPlayerInx+1)%2;
+				currPlayer = playersChars.get(currPlayerInx);
+				currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
+//				currPlayerInx = (currPlayerInx+1)%playersChars.size();
+				
 				
 				
 				revalidate();
