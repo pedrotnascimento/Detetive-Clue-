@@ -20,6 +20,8 @@ public class Controller extends JFrame{
 	public JLabel dadoViciadoLabel;
 	public JComboBox<String> dadoViciado; 
 	public Controller(GamePlay gamePlay){
+	JLabel currPlayer = new JLabel("Jogador: ");
+	currPlayer.setAlignmentX(CENTER_ALIGNMENT);
 		
 		
 		JPanel p =  new JPanel();
@@ -82,7 +84,7 @@ public class Controller extends JFrame{
 				p.repaint();	
 			}
 		});
-		
+		p.add(currPlayer);
 		p.add(lancarDados);
 		p.add(dadoViciadoLabel);
 		p.add(dadoViciado);
@@ -92,7 +94,8 @@ public class Controller extends JFrame{
 		setVisible(true);
 		setBounds(800,0,120,300);
 		
-		gamePlay.setController(jogadasLabel);
+		gamePlay.setQtJogadasLabel(jogadasLabel);
+		gamePlay.setCurrPlayerLabel(currPlayer);
 	}
 	
 	public Integer getDadoValue(){

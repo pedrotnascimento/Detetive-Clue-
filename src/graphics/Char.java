@@ -11,6 +11,7 @@ public class Char extends Cell{
 		super(nome, x, y);
 		this.x = x;
 		this.y = y;
+		this.nome = nome;
 		System.out.printf("%d %d", x,y);
 		
 	}

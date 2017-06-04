@@ -16,10 +16,12 @@ import javax.swing.JLabel;
 public class GamePlay extends JFrame implements KeyListener{
 	static final int W = 800;
 	static final int H = 750;
-	Char curr_player = null;
+	Char currPlayer = null;
+	int currPlayerInx = 0;
+	JLabel currPlayerLabel;
 	public static String[] characters;
 	int qtJogadas;
-	JLabel ctrl;
+	JLabel qtJogadasLabel;
 	
 	Board b;
 	
@@ -85,7 +87,7 @@ public class GamePlay extends JFrame implements KeyListener{
 		getContentPane().add(b);
 		setVisible(true);
 		
-		curr_player = playersChars.get(0);
+		currPlayer = playersChars.get(currPlayerInx);
 	}
 	
 	static void setPlayers( String[] charactersIn){
@@ -116,18 +118,23 @@ public class GamePlay extends JFrame implements KeyListener{
 			}
 		
 			if(dir!=-1){
-		curr_player.move(dir);
-		b.remove(curr_player);
-		b.setCell(curr_player);
-		qtJogadas-=1;
-		System.out.println(qtJogadas);
-		ctrl.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
-		
-		revalidate();
-		repaint();
+				currPlayer.move(dir);
+				b.remove(currPlayer);
+				b.setCell(currPlayer);
+				qtJogadas-=1;
+				System.out.println(qtJogadas);
+				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
+				if(qtJogadas==0){
+					currPlayerInx = (currPlayerInx+1)%playersChars.size();
+					currPlayer = playersChars.get(currPlayerInx);
+					currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+					
+				}
+				revalidate();
+				repaint();
 			}
 		
-		}
+		} 
 		
 	}
 	
@@ -143,8 +150,13 @@ public class GamePlay extends JFrame implements KeyListener{
 		qtJogadas = qt;
 	}
 	
-	public void setController(JLabel ctrl){
-		this.ctrl = ctrl;
+	public void setQtJogadasLabel(JLabel label){
+		this.qtJogadasLabel = label;
+	}
+	public void setCurrPlayerLabel(JLabel label){
+		this.currPlayerLabel = label;
+		System.out.println(currPlayer.nome);
+		this.currPlayerLabel.setText("Jogador: " + currPlayer.nome);
 	}
 
 }
