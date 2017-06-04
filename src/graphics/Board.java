@@ -37,15 +37,14 @@ public class Board extends JPanel{
 	}
 	
 	
-	public void defineCell(Cell cell, int x, int y){
+	public void setCell(Cell cell, int x, int y){
 		Dimension d = cell.getPreferredSize();
 		
 		cell.setBounds(x*sizeBoardCell + pos0_X, y*sizeBoardCell + pos0_Y, d.width, d.height);
 		add(cell);
 	}
-	public void defineCell(Cell cell){
+	public void setCell(Cell cell){
 		Dimension d = cell.getPreferredSize();
-		
 		cell.setBounds(cell.x*sizeBoardCell + pos0_X, cell.y*sizeBoardCell + pos0_Y, d.width, d.height);
 		add(cell);
 	}

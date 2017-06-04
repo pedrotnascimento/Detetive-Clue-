@@ -9,6 +9,9 @@ public class Char extends Cell{
 	int qtMoves;
 	public Char(String nome, int x, int y){
 		super(nome, x, y);
+		this.x = x;
+		this.y = y;
+		System.out.printf("%d %d", x,y);
 		
 	}
 	
@@ -20,22 +23,25 @@ public class Char extends Cell{
 			System.out.println("Direcao nao reconhecida");
 			return false;
 		}
-		int curr_x = this.x;
-		int curr_y = this.y;
 		switch(dir){
 		case UP:
-			setPosition(curr_y+1, curr_x);
+			y-=1;
+			setPosition(x, y);
 			break;
 		case RIGHT:
-			setPosition(curr_y, curr_x+1);
+			x+=1;
+			setPosition(x, y);
 			break;
 		case DOWN:
-			setPosition(curr_y-1, curr_x);
+			y+=1;
+			setPosition(x, y);
 			break;
 		case LEFT:
-			setPosition(curr_y, curr_x-1);
+			x-=1;
+			setPosition(x, y);
 			break;
 		}
+		System.out.println(y);
 		
 		return true;
 	}
