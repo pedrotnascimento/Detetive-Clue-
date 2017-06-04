@@ -32,6 +32,11 @@ public class Controller extends JFrame{
 		JLabel dadoViciadoLabel = new JLabel("Dado Viciado");
 		dadoViciadoLabel.setAlignmentX(CENTER_ALIGNMENT);
 		
+		JLabel jogadasLabel = new JLabel("Jogadas restantes: 0");
+		jogadasLabel.setAlignmentX(CENTER_ALIGNMENT);
+		
+		
+		
 		
 		String[] dadosLis = {"1","2","3","4","5","6"};
 		JComboBox dadoViciado = new JComboBox(dadosLis);
@@ -49,37 +54,30 @@ public class Controller extends JFrame{
 				dadoImage = dados.getDado();	
 				dadoImage.setAlignmentX(CENTER_ALIGNMENT);
 				p.add(dadoImage);
+				jogadasLabel.setText("Jogadas restantes: "+ Integer.toString(dadoValue));
 				p.revalidate();
-				p.repaint();
+				p.repaint();	
 			}
 		});
 		
 		dadoViciado.addActionListener(new ActionListener() {
-			@Override
+			@Override	
 			public void actionPerformed(ActionEvent e) {
 				JComboBox m =(JComboBox) e.getSource();
 				String dadoValueStr =  (String) m.getSelectedItem();
 				dadoValue = Integer.valueOf(dadoValueStr);
-				
 			}
 		});
 		
 		p.add(lancarDados);
 		p.add(dadoViciadoLabel);
 		p.add(dadoViciado);
-		dados.roll();
-		JPanel dTemp = dados.getDado();
-		dTemp.setAlignmentX(CENTER_ALIGNMENT);
-		p.add(dTemp);
+		p.add(jogadasLabel);
 		
 		add(p);
 		setVisible(true);
-		setBounds(750,0,120,300);
-		p.remove(dTemp);
+		setBounds(800,0,120,300);
 		
-		
-
 	}	
-	
 	
 }
