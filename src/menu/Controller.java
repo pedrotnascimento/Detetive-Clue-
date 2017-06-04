@@ -20,6 +20,8 @@ import detetive.Dados;
 
 public class Controller extends JFrame{
 	int dadoValue;
+	JPanel dadoImage = null;
+	Dados dados = new Dados();
 	public Controller(){
 		
 		JPanel p =  new JPanel();
@@ -31,15 +33,24 @@ public class Controller extends JFrame{
 		dadoViciadoLabel.setAlignmentX(CENTER_ALIGNMENT);
 		
 		
-		String[] dados = {"1","2","3","4","5","6"};
-		JComboBox dadoViciado = new JComboBox(dados);
+		String[] dadosLis = {"1","2","3","4","5","6"};
+		JComboBox dadoViciado = new JComboBox(dadosLis);
 		dadoViciado.setAlignmentX(CENTER_ALIGNMENT);
 		
 		
 		lancarDados.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Dados D = new Dados();	
+				if(dadoImage!= null){
+					p.remove(dadoImage);
+				}
+				
+				dadoValue = dados.roll();	
+				dadoImage = dados.getDado();	
+				dadoImage.setAlignmentX(CENTER_ALIGNMENT);
+				p.add(dadoImage);
+				p.revalidate();
+				p.repaint();
 			}
 		});
 		
@@ -49,18 +60,25 @@ public class Controller extends JFrame{
 				JComboBox m =(JComboBox) e.getSource();
 				String dadoValueStr =  (String) m.getSelectedItem();
 				dadoValue = Integer.valueOf(dadoValueStr);
+				
 			}
 		});
 		
 		p.add(lancarDados);
 		p.add(dadoViciadoLabel);
 		p.add(dadoViciado);
+		dados.roll();
+		JPanel dTemp = dados.getDado();
+		dTemp.setAlignmentX(CENTER_ALIGNMENT);
+		p.add(dTemp);
 		
 		add(p);
-		Dimension d = getPreferredSize();
-		
 		setVisible(true);
-		setBounds(750,0,120,120);
+		setBounds(750,0,120,300);
+		p.remove(dTemp);
+		
+		
+
 	}	
 	
 	

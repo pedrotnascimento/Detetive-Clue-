@@ -9,28 +9,16 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Dado extends JFrame{
-	public Dado (String dadoNome){
-		JPanel dado =  new DadoImage(dadoNome);
+public class Dado extends JPanel{
+	String filename;
 	
-		add(dado);
-//		setSize(90, 210);
+	public Dado (String dadoNumero){
+		this.filename = dadoNumero;
 		Dimension d = getPreferredSize();
-		setBounds(1000, 0, 90, 210);
-		setVisible(true);
 	}
-	
-	
-	//Nested class, assim eu posso pegar o JPanel para usar num frame que eu desejar
-	// ou usar no proprio do Dado
-	public class DadoImage extends JPanel{
-		String filename;
 		int width;
 		int height;
 		
-		public DadoImage(String dado){
-			this.filename = dado;
-		}
 		
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
@@ -49,5 +37,4 @@ public class Dado extends JFrame{
 			g.drawImage(img,0,0,null);
 		}		
 	}
-}
 
