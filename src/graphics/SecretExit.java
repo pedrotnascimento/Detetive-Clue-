@@ -1,13 +1,13 @@
 package graphics;
 
-public class Exit extends Cell{
+public class SecretExit extends Cell{
 	int id;
 	public int x;
 	public int y;
 	public int saidaX;
 	public int saidaY;
 	
-	public Exit(int id, int x, int y){
+	public SecretExit(int id, int x, int y){
 		super(String.valueOf(id), x, y);
 		this.id = id;
 		if('x'==id)

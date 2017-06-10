@@ -1,6 +1,7 @@
 package detetive;
 import graphics.*;
 import menu.Controller;
+import menu.PlayerInfo;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -15,17 +16,20 @@ import javax.swing.JLabel;
 public class GamePlay extends JFrame implements KeyListener{
 	static final int W = 800;
 	static final int H = 750;
+	public static String[] characters;
+	static ArrayList<Card> cards = new ArrayList<Card>();
+	ArrayList<Char>playersChars= new ArrayList<Char>();
 	Char currPlayer = null;
 	int currPlayerInx = 0;
 	JLabel currPlayerLabel;
-	public static String[] characters;
 	int qtJogadas;
 	JLabel qtJogadasLabel;
 	Room[] rooms = new Room[8];
 	Board board;
+	PlayerInfo playerInfo;
 	Path path;
 	
-	ArrayList<Char>playersChars= new ArrayList<Char>(); 
+	
 	{
 		setFocusable(true);
 	}
@@ -47,7 +51,6 @@ public class GamePlay extends JFrame implements KeyListener{
 	public void startGame(ArrayList<String> players) {
 		
 		board  = new Board();
-		
 		board.setLayout(null);
 		if(players.contains(characters[0])){
 			Char c = new Char (characters[0], 7, 24);
@@ -80,11 +83,33 @@ public class GamePlay extends JFrame implements KeyListener{
 			playersChars.add(c);
 		}
 		
+		{
+			
+			int i =0;
+			int tam = playersChars.size();
+			while(cards.size()>0){
+				playersChars.get(i%tam).receiveCard(cards.get(0));
+				cards.remove(0);
+				i+=1;
+			}
+			
+			// TESTE PARA VALIDAR CARTAS DISTRIBUIDAS
+//			for(int i =0 ; i< playersChars.size() ;i++){
+//			Char c = playersChars.get(i);
+//			for(Card j : c.getCards()){
+//				System.out.println(j.name);
+//			}
+//		}
+		
+		}
+		
+
+		
 		
 		Room r = new Room(4);
-		Exit e1 = new Exit(1, 6, 19);
+		SecretExit e1 = new SecretExit(1, 6, 19);
 		e1.setSaida(6,18);
-		Exit e2 = new Exit('x',0,22);
+		SecretExit e2 = new SecretExit('x',0,22);
 		e2.setSaida(23, 4);
 		board.setCell(e1);
 		board.setCell(e2);
@@ -98,10 +123,17 @@ public class GamePlay extends JFrame implements KeyListener{
 		setVisible(true);
 		
 		currPlayer = playersChars.get(currPlayerInx);
+		playerInfo = new PlayerInfo();
+		playerInfo.setPlayerInfo(currPlayer.getCards(), currPlayer.getNotes());
+
 	}
 	
-	static void setPlayers( String[] charactersIn){
+	static void configPlayers( String[] charactersIn){
 		characters = charactersIn;
+	}
+	
+	static void configCards( ArrayList<Card> cardsIn){
+		cards = cardsIn;
 	}
 	
 	public void keyTyped(KeyEvent k){
@@ -132,7 +164,7 @@ public class GamePlay extends JFrame implements KeyListener{
 				currRoom =currPlayer.room;
 				Room r = rooms[currRoom];	
 				r.qt-=1;
-				Exit exit = r.hasExit(1	);
+				SecretExit exit = r.hasExit(1	);
 				boolean hasPlayer = false;
 				for( int i =0; i < playersChars.size(); i++){
 					if(exit.saidaX == playersChars.get(i).x &&
@@ -140,13 +172,11 @@ public class GamePlay extends JFrame implements KeyListener{
 							hasPlayer = true;
 				}
 				if(!hasPlayer){
-					currPlayer.setPosition(exit.saidaX, exit.saidaY);
 					currPlayer.room = Path.FLOOR;
+					currPlayer.setPosition(exit.saidaX, exit.saidaY);
 					board.remove(currPlayer);
 					board.setCell(currPlayer);
-					currPlayerInx = (currPlayerInx+1)%2;
-					currPlayer = playersChars.get(currPlayerInx);
-					currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+					changePlayer();
 				}else{
 					System.out.println("ja tem jogador");
 				}
@@ -157,14 +187,12 @@ public class GamePlay extends JFrame implements KeyListener{
 			case KEY_SPACE:
 				currRoom  =currPlayer.room;
 				if(rooms[currRoom].getSecret()!=null){
-					Exit secret = rooms[currRoom].getSecret();
+					SecretExit secret = rooms[currRoom].getSecret();
 					currPlayer.setPosition(secret.saidaX, secret.saidaY);
 					board.remove(currPlayer);
 					board.setCell(currPlayer);
 					qtJogadas=0;
-					currPlayerInx = (currPlayerInx+1)%2;
-					currPlayer = playersChars.get(currPlayerInx);
-					currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+					changePlayer();
 				}
 				
 				return;
@@ -184,10 +212,7 @@ public class GamePlay extends JFrame implements KeyListener{
 				qtJogadas-=1;
 				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
 				if(qtJogadas==0){
-//					currPlayerInx = (currPlayerInx+1)%playersChars.size();
-					currPlayerInx = (currPlayerInx+1)%2;
-					currPlayer = playersChars.get(currPlayerInx);
-					currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+					changePlayer();
 				}
 				revalidate();
 				repaint();
@@ -200,13 +225,8 @@ public class GamePlay extends JFrame implements KeyListener{
 				board.setCell(currPlayer);
 				qtJogadas=0;
 				currPlayer.room = terrainType;
-				currPlayerInx = (currPlayerInx+1)%2;
-				currPlayer = playersChars.get(currPlayerInx);
-				currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+				changePlayer();
 				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
-//				currPlayerInx = (currPlayerInx+1)%playersChars.size();
-				
-				
 				
 				revalidate();
 				repaint();
@@ -229,9 +249,19 @@ public class GamePlay extends JFrame implements KeyListener{
 	public void setQtJogadasLabel(JLabel label){
 		this.qtJogadasLabel = label;
 	}
+	
+	// usada para setar o primeiro jogador na classe controller
 	public void setCurrPlayerLabel(JLabel label){
 		this.currPlayerLabel = label;
 		this.currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+	}
+	
+	void changePlayer(){
+		currPlayerInx = (currPlayerInx+1)%2;
+//		currPlayerInx = (currPlayerInx+1)%playersChars.size();
+		currPlayer = playersChars.get(currPlayerInx);
+		currPlayerLabel.setText("Jogador: " + currPlayer.nome);
+		playerInfo.setPlayerInfo(currPlayer.getCards(), currPlayer.getNotes());
 	}
 
 }

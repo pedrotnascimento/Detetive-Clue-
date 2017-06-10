@@ -1,6 +1,12 @@
 package graphics;
 
+import java.util.ArrayList;
+
+import detetive.Card;
+
 public class Char extends Cell{
+	ArrayList<Card> cards = new ArrayList<Card>();  
+	
 	static final int UP = 0;
 	static final int RIGHT = 1;
 	static final int DOWN = 2;
@@ -11,6 +17,8 @@ public class Char extends Cell{
 	public String nome;
 	public int room = FLOOR;
 	int qtMoves;
+
+	private ArrayList<String> notes = new ArrayList<String>();
 	
 	public Char(String nome, int x, int y){
 		super(nome, x, y);
@@ -20,9 +28,6 @@ public class Char extends Cell{
 		
 	}
 	
-	public void setCards(){
-		
-	}
 	
 	public void setRoom(Room room){
 		this.room = room.room;  
@@ -78,4 +83,19 @@ public class Char extends Cell{
 		return true;
 	}
 	
+	public void receiveCard(Card c){
+		cards.add(c);
+	}
+	
+	public ArrayList<Card> getCards(){
+		return cards;
+	}
+	
+	public ArrayList<String> getNotes() {		
+		return notes;
+	}
+
+	public void addNotes(String note) {
+		this.notes.add(note);
+	}
 }

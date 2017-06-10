@@ -9,22 +9,22 @@ public class Room {
 	public final static String LEFT = "LEFT";
 	public int room;
 	public int qt;
-	Exit secret =null;
+	SecretExit secret =null;
 	
-	ArrayList<Exit>exits= new ArrayList<Exit>();
+	ArrayList<SecretExit>exits= new ArrayList<SecretExit>();
 	public Room(int room){
 		this.room = room;
 	}
 	
-	public void setExit(Exit exit){
+	public void setExit(SecretExit exit){
 		exits.add(exit);
 	}
 	
-	public void setSecret(Exit exit){
+	public void setSecret(SecretExit exit){
 		this.secret =exit;
 	}
 	
-	public Exit hasExit(int exitId){
+	public SecretExit hasExit(int exitId){
 		System.out.println("oioi " + exitId);
 		for(int i =0 ; i< exits.size(); i++){
 			System.out.println(exits.get(i).id);
@@ -36,7 +36,7 @@ public class Room {
 		return null;		
 	}
 	
-	public Exit getSecret(){
+	public SecretExit getSecret(){
 		return secret;
 		
 	}
