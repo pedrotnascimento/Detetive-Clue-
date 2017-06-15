@@ -320,14 +320,16 @@ public class GamePlay extends JFrame implements KeyListener{
 									 where != confidential.getWhere()|| 
 									 weapon != confidential.getWeapon()){
 										 System.out.println("Acusação FALSA!! Jogador perdeu!");
-										 int OK = JOptionPane.OK_OPTION;
 										 JOptionPane.showMessageDialog(s, "Acusação FALSA!! Jogador perdeu!");
+								 }
+								 else{
+									 JOptionPane.showMessageDialog(s, "VOCÊ VENCEU!");
 								 }
 							 
 							  
 							} 
 							else {
-							  System.out.println("No Option, passa direto");
+							  System.out.println("sem acusação, passa direto");
 							} 
 							break;
 						}
