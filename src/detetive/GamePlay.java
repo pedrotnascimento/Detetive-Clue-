@@ -2,22 +2,28 @@ package detetive;
 import graphics.*;
 import menu.Controller;
 import menu.PlayerInfo;
+import menu.Suggest;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
+import javax.swing.JOptionPane;
+	
 
 public class GamePlay extends JFrame implements KeyListener{
 	static final int W = 800;
 	static final int H = 750;
 	public static String[] characters;
 	static ArrayList<Card> cards = new ArrayList<Card>();
+	static Confidential confidential;
 	ArrayList<Char>playersChars= new ArrayList<Char>();
 	Char currPlayer = null;
 	int currPlayerInx = 0;
@@ -102,9 +108,7 @@ public class GamePlay extends JFrame implements KeyListener{
 //		}
 		
 		}
-		
 
-		
 		
 		Room r = new Room(4);
 		SecretExit e1 = new SecretExit(1, 6, 19);
@@ -134,6 +138,10 @@ public class GamePlay extends JFrame implements KeyListener{
 	
 	static void configCards( ArrayList<Card> cardsIn){
 		cards = cardsIn;
+	}
+	
+	static void configClue(Confidential confident){
+		confidential = confident;
 	}
 	
 	public void keyTyped(KeyEvent k){
@@ -224,10 +232,12 @@ public class GamePlay extends JFrame implements KeyListener{
 				board.remove(currPlayer);
 				board.setCell(currPlayer);
 				qtJogadas=0;
-				currPlayer.room = terrainType;
-				changePlayer();
 				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
+				currPlayer.room = terrainType;
 				
+				System.out.println("passou1");
+				suggestionRoutine();
+				System.out.println("passou2");
 				revalidate();
 				repaint();
 			}
@@ -263,5 +273,73 @@ public class GamePlay extends JFrame implements KeyListener{
 		currPlayerLabel.setText("Jogador: " + currPlayer.nome);
 		playerInfo.setPlayerInfo(currPlayer.getCards(), currPlayer.getNotes());
 	}
+	
+	void suggestionRoutine(){
+		Suggest s = new Suggest();
+		s.enviar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("passou3");
+				String who = s.getWho();
+				String where = s.getWhere();
+				String weapon = s.getWeapon();
+				System.out.println(who + " "+  where + " " + weapon);
+				for(Char p : playersChars){
+					if(p.nome!=currPlayer.nome){
+						boolean breaked = false;
+						ArrayList<Card> cs = p.getCards();
+						System.out.println("nome " +p.nome);
+						for(int i =0 ; i<cs.size(); i++){
+							Card c = cs.get(i);
+							if(who==c.name){
+								currPlayer.addNotes(who);
+								breaked = true;
+								break;
+								
+							}
+							else if(where==c.name){
+								currPlayer.addNotes(where);
+								breaked = true;
+								break;
+							}
+							else if(weapon==c.name){
+								currPlayer.addNotes(weapon);
+								breaked = true;
+								break;
+							}
+							System.out.printf("%s ", c.name);
+								
+						}
+						if(breaked){
+							int dialogButton = JOptionPane.YES_NO_OPTION;
+							int dialogResult = JOptionPane.showConfirmDialog(s, "Fará acusação?", "Ninguém se manisfestou", dialogButton);
+							if(dialogResult == 0) {
+							  System.out.println("Yes option, checando o clue");
+								 if(who != confidential.getWho() || 
+									 where != confidential.getWhere()|| 
+									 weapon != confidential.getWeapon()){
+										 System.out.println("Acusação FALSA!! Jogador perdeu!");
+										 int OK = JOptionPane.OK_OPTION;
+										 JOptionPane.showMessageDialog(s, "Acusação FALSA!! Jogador perdeu!");
+								 }
+							 
+							  
+							} 
+							else {
+							  System.out.println("No Option, passa direto");
+							} 
+							break;
+						}
+						
+					}
+				}
+				
+				s.setVisible(false);
+				changePlayer();
+			}
+		});
+	}
+	
 
 }

@@ -3,13 +3,16 @@ package detetive;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import menu.MainMenu;
 import menu.PlayerInfo;
+import menu.Suggest;
 
 public class Main {
-	static final String [] players = {
+	public static final String [] players = {
 			"Scarlet",
 			"Mustard",
 			"White",
@@ -18,7 +21,7 @@ public class Main {
 			"Plum"
 	};
 	
-	static final String [] weapons= {
+	public static final String [] weapons= {
 			"Revolver",
 			"Cano",
 			"Castical",
@@ -27,7 +30,7 @@ public class Main {
 			"Faca"
 	};
 	//TODO?: usar dicionario para apontar para outras informações 
-	static final String [] rooms= {
+	public static final String [] rooms= {
 			"Cozinha",
 			"Sala de Musica",
 			"Jardim de Inverno",
@@ -47,7 +50,6 @@ public class Main {
 		ArrayList<Card> playersCards = new ArrayList<Card>();
 		ArrayList<Card> weaponsCards = new ArrayList<Card>();
 		ArrayList<Card> roomsCards = new ArrayList<Card>();
-		ArrayList<Card> confidentialCards = new ArrayList<Card>();
 		for(int i =0 ; i<players.length; i++){
 			Card c = new Card(players[i]);
 			playersCards.add(c);
@@ -71,7 +73,7 @@ public class Main {
 		
 		confidential.setWho(playersCards.get(0));
 		playersCards.remove(0);
-		confidential.setWhich(weaponsCards.get(0));
+		confidential.setWeapon(weaponsCards.get(0));
 		weaponsCards.remove(0);
 		confidential.setWhere(roomsCards.get(0));
 		roomsCards.remove(0);
@@ -83,15 +85,17 @@ public class Main {
 		Collections.shuffle(cards);
 		
 		GamePlay.configCards(cards);
-		//teste para player info
+		GamePlay.configClue(confidential);
+////		teste para player info
 //		PlayerInfo p  = new PlayerInfo();
 //		ArrayList<String> testeNotes = new ArrayList<String>();
 //		testeNotes.add("maça");
 //		testeNotes.add("pera");
 //		testeNotes.add("uva");
 //		p.setPlayerInfo(null, testeNotes);
+//		p.addNote("açlskdjf");
 		JFrame m = new MainMenu();
 		
-		
+
 	}
 }

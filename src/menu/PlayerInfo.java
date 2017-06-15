@@ -57,4 +57,12 @@ public class PlayerInfo extends JFrame{
 		revalidate();
 	}
 	
+	public void addNote(String note){
+		JLabel noteLbl = new JLabel(note);
+		p.add(noteLbl);
+		System.out.println("adiciounou   " + note);
+		repaint();
+		revalidate();
+	}
+	
 }

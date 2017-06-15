@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Confidential {
 	Card who;
-	Card which;
+	Card weapon;
 	Card where;
 	ArrayList<Card> cards = new ArrayList<Card>();
 	
@@ -14,7 +14,7 @@ public class Confidential {
 	
 	public boolean isAccusationTrue(String acusWho, String acusWhich, String acusWhere){
 		if(acusWho!= who.name ||
-		   acusWhich!= which.name ||
+		   acusWhich!= weapon.name ||
 		   acusWhere!= where.name){
 			return false;
 		}
@@ -24,10 +24,23 @@ public class Confidential {
 	public void setWho(Card c){
 		who = c;
 	}
-	public void setWhich(Card c){
-		which = c;
+	public void setWeapon(Card c){
+		weapon = c;
 	}
 	public void setWhere(Card c){
 		where = c;
 	}
+	
+	public String getWho(){
+		return who.name;
+	}
+	
+	public String getWhere(){
+		return  where.name;
+	}
+	
+	public String getWeapon(){
+		return  weapon.name;
+	}
+	
 }
