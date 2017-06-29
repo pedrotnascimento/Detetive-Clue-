@@ -109,18 +109,8 @@ public class GamePlay extends JFrame implements KeyListener{
 		
 		}
 
-		
-		Room r = new Room(4);
-		SecretExit e1 = new SecretExit(1, 6, 19);
-		e1.setSaida(6,18);
-		SecretExit e2 = new SecretExit('x',0,22);
-		e2.setSaida(23, 4);
-		board.setCell(e1);
-		board.setCell(e2);
-		r.setExit(e1);
-		r.setSecret(e2);
-		rooms[4] = r;
-		path = new Path(board, rooms);
+		path = new Path(board);
+		rooms = path.getRooms();
 		
 		
 		getContentPane().add(board);
@@ -285,9 +275,9 @@ public class GamePlay extends JFrame implements KeyListener{
 				String where = s.getWhere();
 				String weapon = s.getWeapon();
 				System.out.println(who + " "+  where + " " + weapon);
+				boolean breaked = false;
 				for(Char p : playersChars){
 					if(p.nome!=currPlayer.nome){
-						boolean breaked = false;
 						ArrayList<Card> cs = p.getCards();
 						System.out.println("nome " +p.nome);
 						for(int i =0 ; i<cs.size(); i++){
@@ -309,32 +299,33 @@ public class GamePlay extends JFrame implements KeyListener{
 								break;
 							}
 							System.out.printf("%s ", c.name);
-								
-						}
-						if(breaked){
-							int dialogButton = JOptionPane.YES_NO_OPTION;
-							int dialogResult = JOptionPane.showConfirmDialog(s, "Fará acusação?", "Ninguém se manisfestou", dialogButton);
-							if(dialogResult == 0) {
-							  System.out.println("Yes option, checando o clue");
-								 if(who != confidential.getWho() || 
-									 where != confidential.getWhere()|| 
-									 weapon != confidential.getWeapon()){
-										 System.out.println("Acusação FALSA!! Jogador perdeu!");
-										 JOptionPane.showMessageDialog(s, "Acusação FALSA!! Jogador perdeu!");
-								 }
-								 else{
-									 JOptionPane.showMessageDialog(s, "VOCÊ VENCEU!");
-								 }
-							 
-							  
-							} 
-							else {
-							  System.out.println("sem acusação, passa direto");
-							} 
-							break;
 						}
 						
+						if(breaked) break;
 					}
+				}
+				if(!breaked){
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog(s, "Fará acusação?", "Ninguém se manisfestou", dialogButton);
+					if(dialogResult == 0) {
+					  System.out.println("Yes option, checando o clue");
+						 if(who != confidential.getWho() || 
+							 where != confidential.getWhere()|| 
+							 weapon != confidential.getWeapon()){
+								 System.out.println("Acusação FALSA!! Jogador perdeu!");
+								 JOptionPane.showMessageDialog(s, "Acusação FALSA!! Jogador perdeu!");
+								 playersChars.remove(currPlayer);
+						 }
+						 else{
+							 JOptionPane.showMessageDialog(s, "VOCÊ VENCEU!");
+						 }
+					 
+					  
+					} 
+					else {
+					  System.out.println("sem acusação, passa direto");
+					} 
+					
 				}
 				
 				s.setVisible(false);

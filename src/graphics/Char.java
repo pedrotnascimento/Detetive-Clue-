@@ -34,6 +34,7 @@ public class Char extends Cell{
 	}
 	
 	public boolean move(int dir){
+		System.out.println("move " +  dir);
 		if(!(dir>=0 && dir<=3)){
 			System.out.println("Direcao nao reconhecida");
 			return false;

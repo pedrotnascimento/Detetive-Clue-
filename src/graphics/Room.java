@@ -8,7 +8,7 @@ public class Room {
 	public final static String DOWN = "DOWN";
 	public final static String LEFT = "LEFT";
 	public int room;
-	public int qt;
+	public int qt; //quantidade de char no quarto
 	SecretExit secret =null;
 	
 	ArrayList<SecretExit>exits= new ArrayList<SecretExit>();
