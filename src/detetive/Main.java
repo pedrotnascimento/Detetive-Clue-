@@ -2,14 +2,9 @@ package detetive;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import menu.MainMenu;
-import menu.PlayerInfo;
-import menu.Suggest;
+
 
 public class Main {
 	public static final String [] players = {

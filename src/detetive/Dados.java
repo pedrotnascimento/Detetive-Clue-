@@ -16,6 +16,7 @@ public class Dados {
 	}
 	
 	public Dado getDado(){
+		
 		return dado;
 	}
 }
