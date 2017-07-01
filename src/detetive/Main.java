@@ -66,11 +66,11 @@ public class Main {
 		
 		Confidential confidential = new Confidential();
 		
-		confidential.setWho(playersCards.get(0));
+		confidential.setWho(playersCards.get(0).name);
 		playersCards.remove(0);
-		confidential.setWeapon(weaponsCards.get(0));
+		confidential.setWeapon(weaponsCards.get(0).name);
 		weaponsCards.remove(0);
-		confidential.setWhere(roomsCards.get(0));
+		confidential.setWhere(roomsCards.get(0).name);
 		roomsCards.remove(0);
 		
 		ArrayList<Card> cards = new ArrayList<Card>();	

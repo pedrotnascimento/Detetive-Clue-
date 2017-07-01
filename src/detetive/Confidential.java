@@ -3,44 +3,44 @@ package detetive;
 import java.util.ArrayList;
 
 public class Confidential {
-	Card who;
-	Card weapon;
-	Card where;
-	ArrayList<Card> cards = new ArrayList<Card>();
+	String who;
+	String weapon;
+	String where;
+	ArrayList<String> Strings = new ArrayList<String>();
 	
 	public Confidential(){
 		
 	}
 	
 	public boolean isAccusationTrue(String acusWho, String acusWhich, String acusWhere){
-		if(acusWho!= who.name ||
-		   acusWhich!= weapon.name ||
-		   acusWhere!= where.name){
+		if(acusWho!= who ||
+		   acusWhich!= weapon ||
+		   acusWhere!= where){
 			return false;
 		}
 		return true;
 	}
 	
-	public void setWho(Card c){
+	public void setWho(String c){
 		who = c;
 	}
-	public void setWeapon(Card c){
+	public void setWeapon(String c){
 		weapon = c;
 	}
-	public void setWhere(Card c){
+	public void setWhere(String c){
 		where = c;
 	}
 	
 	public String getWho(){
-		return who.name;
+		return who;
 	}
 	
 	public String getWhere(){
-		return  where.name;
+		return  where;
 	}
 	
 	public String getWeapon(){
-		return  weapon.name;
+		return  weapon;
 	}
 	
 }

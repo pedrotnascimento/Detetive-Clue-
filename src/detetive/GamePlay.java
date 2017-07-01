@@ -7,7 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -47,11 +53,24 @@ public class GamePlay extends JFrame implements KeyListener{
 		startGame(players);
 		addKeyListener(this);
 	}
+	
+	public GamePlay(){
+		setSize(W,H);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setTitle("Clue!!");
+		
+		loadGame();
+		addKeyListener(this);
+	}
  
 	public void startGame(ArrayList<String> players) {
 		
 		board  = new Board();
 		board.setLayout(null);
+		path = new Path(board);
+		rooms = path.getRooms();		
+		getContentPane().add(board);
+
 		if(players.contains(characters[0])){
 			Player c = new Player (characters[0], 7, 24);
 			board.setCell(c);
@@ -84,7 +103,6 @@ public class GamePlay extends JFrame implements KeyListener{
 		}
 		
 		{
-			
 			int i =0;
 			int tam = playersChars.size();
 			while(cards.size()>0){
@@ -100,14 +118,7 @@ public class GamePlay extends JFrame implements KeyListener{
 //				System.out.println(j.name);
 //			}
 //		}
-		
 		}
-
-		path = new Path(board);
-		rooms = path.getRooms();
-		
-		
-		getContentPane().add(board);
 		setVisible(true);
 		
 		currPlayer = playersChars.get(currPlayerInx);
@@ -115,6 +126,75 @@ public class GamePlay extends JFrame implements KeyListener{
 		playerInfo.setPlayerInfo(currPlayer.getCards(), currPlayer.getNotes());
 
 	}
+	
+	public void loadGame(){
+		board  = new Board();
+		board.setLayout(null);
+		path = new Path(board);
+		rooms = path.getRooms();		
+		getContentPane().add(board);
+		
+		Scanner load=null;
+		try{
+			load = new Scanner(new FileReader("jogo_salvo.txt"));
+			
+		}
+		catch(IOException FileNotFoundException){
+			
+			FileNotFoundException.printStackTrace();
+			System.out.println("Não tem arquivo de jogo a ser carregado");
+			System.exit(0);
+		}
+		
+		//obtem o nome do jogador corrente
+		String currentPlayerName = aux_loadGame(load.nextLine());
+		
+		//obtem qt de movimentos
+		int currentPlayerQtMoves = Integer.parseInt(aux_loadGame(load.nextLine()));
+		String Who = aux_loadGame(load.nextLine());
+		String Where = aux_loadGame(load.nextLine());
+		String Weapon = aux_loadGame(load.nextLine());
+		confidential = new Confidential();
+		confidential.setWho(Who);
+		confidential.setWhere(Where);
+		confidential.setWeapon(Weapon);
+		load.nextLine();
+		String current;
+		Player p;
+		while(load.hasNext()){
+			current = load.nextLine();
+			String[] line = current.split(";");
+			p = new Player(line[0], Integer.parseInt(line[1]), Integer.parseInt(line[2]));
+			p.room = Integer.parseInt(line[3]);
+			String[] notes = line[4].split("&");
+			for(int  i =0 ; i < notes.length; i++){
+				p.addNotes(notes[i]);
+			}
+			
+			String[] cards = line[5].split("&");
+			for(int  i =0 ; i < cards.length; i++){
+				p.receiveCard(new Card(cards[i]));
+			}
+			
+			
+			board.setCell(p);
+			playersChars.add(p);
+		}
+		
+		for(int i =0; i< playersChars.size(); i++)
+			if(playersChars.get(i).nome == currentPlayerName){
+				currPlayerInx = i;
+				break;
+			}
+				
+		currPlayer = playersChars.get(currPlayerInx);
+		playerInfo = new PlayerInfo();
+		playerInfo.setPlayerInfo(currPlayer.getCards(), currPlayer.getNotes());
+		setVisible(true);
+		
+	}
+	
+	
 	
 	static void configPlayers( String[] charactersIn){
 		characters = charactersIn;
@@ -327,15 +407,14 @@ public class GamePlay extends JFrame implements KeyListener{
 					int dialogResult = JOptionPane.showConfirmDialog(s, "Fará acusação?", "Ninguém se manisfestou", dialogButton);
 					if(dialogResult == 0) {
 					  System.out.println("Yes option, checando o clue");
-						 if(who != confidential.getWho() || 
-							 where != confidential.getWhere()|| 
-							 weapon != confidential.getWeapon()){
-								 System.out.println("Acusação FALSA!! Jogador perdeu!");
-								 JOptionPane.showMessageDialog(s, "Acusação FALSA!! Jogador perdeu!");
-								 playersChars.remove(currPlayer);
+						 if(confidential.isAccusationTrue(who, weapon, where)){
+							 JOptionPane.showMessageDialog(s, "VOCÊ VENCEU!");
+							 System.exit(0);
 						 }
 						 else{
-							 JOptionPane.showMessageDialog(s, "VOCÊ VENCEU!");
+							 System.out.println("Acusação FALSA!! Jogador perdeu!");
+							 JOptionPane.showMessageDialog(s, "Acusação FALSA!! Jogador perdeu!");
+							 playersChars.remove(currPlayer);
 						 }
 					 
 					  
@@ -352,5 +431,45 @@ public class GamePlay extends JFrame implements KeyListener{
 		});
 	}
 	
+	public String getFullReport(){
+		String report = "@current:" + currPlayer.nome + "\n";
+		report +=  "@move_qt:" + currPlayer.qtMoves + "\n";
+		report += "@who:" + confidential.getWho() + "\n";
+		report += "@where:" + confidential.getWhere() + "\n";
+		report += "@weapon:" + confidential.getWeapon()+ "\n";
+		report +="player;x;y;room;notes;cards\n";
+		for(int i =0; i< playersChars.size(); i++){
+			Player p = playersChars.get(i);
+			report += p.nome + ";" + p.x + ";"+ p.y + ";" + p.room + ";";
+			ArrayList<String> n = p.getNotes();
+			for(int j = 0 ; j < n.size(); j++){
+				report+= n.get(j);
+				if(j < n.size() -1)
+					report += "&";
+				
+			}
+			
+			report += ";";
+			ArrayList<Card> a = p.getCards(); 
+			for(int j = 0 ; j < a.size(); j++){
+				report+= a.get(j).name;
+				if(j < a.size() -1)
+					report += "&";
+				
+			}   
+			report += "\n";
+			
+			System.out.println("relatorio " + i + " " + report );
+		}
+		
+		 
+		return report;
+	}
+	
+	private String aux_loadGame(String current){
+		int inx = current.indexOf(':');
+		return current.substring(inx+1);
+		
+	}
 
 }
