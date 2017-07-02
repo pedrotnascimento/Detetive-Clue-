@@ -5,17 +5,15 @@ import java.util.ArrayList;
 import graphics.Exit;
 
 public class Room {
-	public final static String UP = "UP";
-	public final static String RIGHT = "RIGHT";
-	public final static String DOWN = "DOWN";
-	public final static String LEFT = "LEFT";
+	public String name;
 	public int room;
 	public int qt; //quantidade de char no quarto
 	Exit secret =null;
 	
 	ArrayList<Exit>exits= new ArrayList<Exit>();
-	public Room(int room){
+	public Room(int room,String name){
 		this.room = room;
+		this.name = name;
 	}
 	
 	public void setExit(Exit exit){
@@ -27,7 +25,6 @@ public class Room {
 	}
 	
 	public Exit hasExit(int exitId){
-		System.out.println("oioi " + exitId);
 		for(int i =0 ; i< exits.size(); i++){
 			System.out.println(exits.get(i).id);
 			if(exitId==exits.get(i).id){

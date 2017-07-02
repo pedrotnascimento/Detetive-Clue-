@@ -26,15 +26,15 @@ public class Main {
 	};
 	//TODO?: usar dicionario para apontar para outras informações 
 	public static final String [] rooms= {
+			"Sala de Estar",
+			"Sala de Jantar",
 			"Cozinha",
 			"Sala de Musica",
 			"Jardim de Inverno",
-			"Sala de Jantar",
 			"Salao de Jogos",
 			"Biblioteca",
-			"Sala de Estar",
-			"Entrada",
-			"Escritorio"
+			"Escritorio",
+			"Entrada"
 	};
 	
 	 

@@ -14,6 +14,7 @@ public class Player extends Cell{
 	public static final int FLOOR = 1;
 	public String nome;
 	public int room = FLOOR;
+	public int accusedLastRound = -1;
 	int qtMoves;
 
 	private ArrayList<String> notes = new ArrayList<String>();

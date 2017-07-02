@@ -8,9 +8,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class CardPanel extends JPanel{
-	String filename = "";
-	public CardPanel(String img){
+public class CardImg extends JPanel{
+	public String name;
+	public String filename = "";
+	public CardImg(String img){
 		filename = img;
 	}
 	

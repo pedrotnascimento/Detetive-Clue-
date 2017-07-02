@@ -1,0 +1,12 @@
+@current:Scarlet
+@move_qt:3
+@who:White
+@where:Cozinha
+@weapon:Chave Inglesa
+player;x;y;room;notes;cards
+Scarlet;7;5;1;;Cano&Biblioteca&Entrada
+Mustard;0;17;1;;Sala de Jantar&Escritorio&Sala de Musica
+White;9;0;1;;Jardim de Inverno&Faca&Salao de Jogos
+Green;14;0;1;;Corda&Scarlet&Mustard
+Peacock;23;6;1;;Sala de Estar&Plum&Green
+Plum;23;19;1;;Castical&Revolver&Peacock

@@ -1,7 +1,9 @@
 package detetive;
 
 import graphics.Board;
+import detetive.Main;
 import graphics.Exit;
+
 public class Path {
 	int[][] path;
 	public static final int ESTAR = 4;
@@ -21,12 +23,13 @@ public class Path {
 	static final int DOWN = 2;
 	static final int LEFT = 3;
 	Room[] rooms = new Room[13];
+	int MAIN_OFFSET = 4; // offset do dicionario em relação a main
 	
 	public Path(Board b){
 		Exit e1,e2,e3,e4;
 		Room r; 
 		//sala de estar
-		r = new Room(ESTAR);
+		r = new Room(ESTAR, Main.rooms[ESTAR-MAIN_OFFSET] );
 		e1 = new Exit(1, 6, 19);
 		e1.setSaida(6,18);
 		e2 = new Exit('x',0,22, INVERNO);
@@ -38,7 +41,7 @@ public class Path {
 		rooms[ESTAR] = r;
 		
 		//sala de jantar
-		r = new Room(JANTAR);
+		r = new Room(JANTAR, Main.rooms[JANTAR-MAIN_OFFSET]);
 		e1 = new Exit(1, 6, 15);
 		e1.setSaida(6,16);
 		e2 = new Exit(2, 7, 12);
@@ -50,7 +53,7 @@ public class Path {
 		rooms[JANTAR] = r;
 		
 		//cozinha
-		r = new Room(COZINHA);
+		r = new Room(COZINHA, Main.rooms[COZINHA-MAIN_OFFSET]);
 		e1 = new Exit(1, 4, 6);
 		e1.setSaida(4,7);
 		e2 = new Exit('x', 0, 2, ESCRITORIO);
@@ -62,7 +65,7 @@ public class Path {
 		rooms[COZINHA] = r;
 		
 		//sala de música
-		r = new Room(MUSICA);
+		r = new Room(MUSICA, Main.rooms[MUSICA-MAIN_OFFSET]);
 		e1 = new Exit(1, 8, 5);
 		e1.setSaida(7,5);
 		e2 = new Exit(2,9,7);
@@ -82,7 +85,7 @@ public class Path {
 		rooms[MUSICA] = r;
 		
 		//sala de inverno
-		r = new Room(INVERNO);
+		r = new Room(INVERNO, Main.rooms[INVERNO-MAIN_OFFSET]);
 		e1 = new Exit(1, 19, 5);
 		e1.setSaida(18,5);
 		e2 = new Exit('x',23,3, ESTAR);
@@ -94,7 +97,7 @@ public class Path {
 		rooms[INVERNO] = r;
 		
 		//sala de jogos
-		r = new Room(JOGOS);
+		r = new Room(JOGOS, Main.rooms[JOGOS-MAIN_OFFSET]);
 		e1 = new Exit(1, 18, 9);
 		e1.setSaida(17,9);
 		e2 = new Exit(2, 22, 12);
@@ -106,7 +109,7 @@ public class Path {
 		rooms[JOGOS] = r;
 		
 		//sala de biblioteca
-		r = new Room(BIBLIOTECA);
+		r = new Room(BIBLIOTECA, Main.rooms[BIBLIOTECA-MAIN_OFFSET]);
 		e1 = new Exit(1, 20, 14);
 		e1.setSaida(20,13);
 		e2 = new Exit(2, 17, 16);
@@ -118,7 +121,7 @@ public class Path {
 		rooms[BIBLIOTECA] = r;
 		
 		//sala de escritorio
-		r = new Room(ESCRITORIO);
+		r = new Room(ESCRITORIO, Main.rooms[ESCRITORIO-MAIN_OFFSET]);
 		e1 = new Exit(1, 17, 21);
 		e1.setSaida(17,20);
 		e2 = new Exit('x', 23, 22, COZINHA);
@@ -130,7 +133,7 @@ public class Path {
 		rooms[ESCRITORIO] = r;
 		
 		//sala de entrada
-		r = new Room(ENTRADA);
+		r = new Room(ENTRADA, Main.rooms[ENTRADA-MAIN_OFFSET]);
 		e1 = new Exit(1, 11, 18);
 		e1.setSaida(11, 17);
 		e2 = new Exit(2, 12, 18);

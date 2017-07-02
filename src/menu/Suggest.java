@@ -14,8 +14,8 @@ public class Suggest extends JFrame{
 	JComboBox<String> cbWho;
 	JComboBox<String> cbWhere;
 	
-	public Suggest(){
-		setTitle("Dê o seu palpite");
+	public Suggest(boolean isAcusation){
+
 		JPanel p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		
@@ -26,12 +26,20 @@ public class Suggest extends JFrame{
 		for(String item: Main.players){
 			cbWho.addItem(item);
 		}
-		
-		JLabel lWhere = new JLabel("Onde?");
-		lWhere.setAlignmentX(CENTER_ALIGNMENT);
-		cbWhere = new JComboBox<String>();
-		for(String item: Main.rooms){
-			cbWhere.addItem(item);
+		if(isAcusation){
+			JLabel lWhere = new JLabel("Onde?");
+			lWhere.setAlignmentX(CENTER_ALIGNMENT);
+			cbWhere = new JComboBox<String>();
+			for(String item: Main.rooms){
+				cbWhere.addItem(item);
+			}
+			p.add(lWhere);
+			p.add(cbWhere);
+			setTitle("Faça sua acusação");
+			
+		}
+		else{
+		setTitle("Dê o seu palpite");
 		}
 		
 		JLabel lWeapons = new JLabel("Como?");
@@ -46,8 +54,8 @@ public class Suggest extends JFrame{
 		/////////////////////
 		p.add(lWho);
 		p.add(cbWho);
-		p.add(lWhere);
-		p.add(cbWhere);
+		
+		
 		p.add(lWeapons);
 		p.add(cbWeapons);
 		p.add(enviar);

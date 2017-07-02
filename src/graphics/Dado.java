@@ -1,12 +1,10 @@
 package graphics;
-import java.awt.Dimension;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Dado extends JPanel{
@@ -14,7 +12,6 @@ public class Dado extends JPanel{
 	
 	public Dado (String dadoNumero){
 		this.filename = dadoNumero;
-		Dimension d = getPreferredSize();
 	}
 		int width;
 		int height;

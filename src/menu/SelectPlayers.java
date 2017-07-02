@@ -1,9 +1,7 @@
 package menu;
 
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
 import detetive.GamePlay;
 
@@ -23,6 +20,8 @@ import detetive.GamePlay;
  */
 public class SelectPlayers extends JFrame{
 	public SelectPlayers(){
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
 		JPanel p =  new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		String [] players = GamePlay.characters;

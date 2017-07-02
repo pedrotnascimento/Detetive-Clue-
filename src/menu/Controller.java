@@ -2,6 +2,9 @@ package menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,14 +21,39 @@ public class Controller extends JFrame{
 	JPanel dadoImage = null;
 	Dados dados = new Dados();
 	public JLabel dadoViciadoLabel;
-	public JComboBox<String> dadoViciado; 
+	public JComboBox<String> dadoViciado;
+	
 	public Controller(GamePlay gamePlay){
-	JLabel currPlayer = new JLabel("Jogador: ");
-	currPlayer.setAlignmentX(CENTER_ALIGNMENT);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		JLabel currPlayer = new JLabel("Jogador: ");
+		currPlayer.setAlignmentX(CENTER_ALIGNMENT);
 		
 		
 		JPanel p =  new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+		JButton saveGame = new JButton("SALVAR JOGO");
+		saveGame.setAlignmentX(CENTER_ALIGNMENT);
+		
+		saveGame.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String report = gamePlay.getFullReport();
+				try{
+					PrintWriter out = new PrintWriter( "jogo_salvo.txt" );
+					out.print(report);
+					out.close();
+					System.out.println("jogo salvo");
+				}
+				catch(IOException  FileNotFoundException){
+					FileNotFoundException.printStackTrace();
+					System.out.println("ERROR, arquivo de salvamento não encontrado");
+				}
+			
+				
+			}
+		});
+		
 		JButton lancarDados = new JButton("DADOS");
 		lancarDados.setAlignmentX(CENTER_ALIGNMENT);
 		
@@ -43,7 +71,7 @@ public class Controller extends JFrame{
 		
 		
 		
-		// COMUNICAO COM O JOGO
+		// COMUNICAO COM O JOGO (OBSERVER) DO GAMEPLAY AO CONTROLLER
 		ActionListener aL = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -83,6 +111,7 @@ public class Controller extends JFrame{
 				p.repaint();	
 			}
 		});
+		p.add(saveGame);
 		p.add(currPlayer);
 		p.add(lancarDados);
 		p.add(dadoViciadoLabel);
@@ -93,6 +122,11 @@ public class Controller extends JFrame{
 		setVisible(true);
 		setBounds(800,0,120,300);
 		
+		// OBSERVER: DO CONTROLLER EM RELAÇÃO AO GAMEPLAY
+		if(gamePlay.qtJogadas >0){
+			jogadasLabel.setText("Jogadas restantes: "+ gamePlay.qtJogadas);
+		}
+		
 		gamePlay.setQtJogadasLabel(jogadasLabel);
 		gamePlay.setCurrPlayerLabel(currPlayer);
 	}
@@ -100,5 +134,6 @@ public class Controller extends JFrame{
 	public Integer getDadoValue(){
 		return dadoValue;
 	}
+	 
 	
 }

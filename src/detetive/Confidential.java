@@ -9,13 +9,18 @@ public class Confidential {
 	ArrayList<String> Strings = new ArrayList<String>();
 	
 	public Confidential(){
-		
+		 
 	}
 	
 	public boolean isAccusationTrue(String acusWho, String acusWhich, String acusWhere){
-		if(acusWho!= who ||
-		   acusWhich!= weapon ||
-		   acusWhere!= where){
+		System.out.println("confi::" + who + " " + where + " " + weapon);
+		System.out.println("entrda::" + acusWho + " " + acusWhere + " " + acusWhich);
+		System.out.println(acusWho.equals(who));
+				System.out.println( acusWhere.equals(where));
+		System.out.println(acusWhich.equals(weapon));
+		if(!acusWho.equals(who) ||
+		   !acusWhich.equals(weapon) ||
+		   !acusWhere.equals(where)){
 			return false;
 		}
 		return true;

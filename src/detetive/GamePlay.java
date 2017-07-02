@@ -29,7 +29,7 @@ public class GamePlay extends JFrame implements KeyListener{
 	Player currPlayer = null;
 	int currPlayerInx = 0;
 	JLabel currPlayerLabel;
-	int qtJogadas;
+	public int qtJogadas;
 	JLabel qtJogadasLabel;
 	Room[] rooms;
 	Board board;
@@ -158,6 +158,7 @@ public class GamePlay extends JFrame implements KeyListener{
 		confidential.setWho(Who);
 		confidential.setWhere(Where);
 		confidential.setWeapon(Weapon);
+
 		load.nextLine();
 		String current;
 		Player p;
@@ -182,12 +183,13 @@ public class GamePlay extends JFrame implements KeyListener{
 		}
 		
 		for(int i =0; i< playersChars.size(); i++)
-			if(playersChars.get(i).nome == currentPlayerName){
+			if(playersChars.get(i).nome.equals(currentPlayerName)){
 				currPlayerInx = i;
 				break;
 			}
-				
+		System.out.println(currentPlayerQtMoves);		
 		currPlayer = playersChars.get(currPlayerInx);
+		qtJogadas = currentPlayerQtMoves;
 		playerInfo = new PlayerInfo();
 		playerInfo.setPlayerInfo(currPlayer.getCards(), currPlayer.getNotes());
 		setVisible(true);
@@ -254,7 +256,8 @@ public class GamePlay extends JFrame implements KeyListener{
 			case '$':
 				movePlayerOut(4);
 				return;
-			case KEY_SPACE:
+			case 'x':
+			case 'X':
 				currRoom  =currPlayer.room;
 				if(rooms[currRoom].hasSecret()==true){
 					int x = rooms[currRoom].getSecretPosX();
@@ -302,7 +305,7 @@ public class GamePlay extends JFrame implements KeyListener{
 				qtJogadasLabel.setText("Jogadas restantes: " +String.valueOf(qtJogadas));
 				currPlayer.room = terrainType;
 				
-				suggestionRoutine();
+				suggestionRoutine(dir);
 				revalidate();
 				repaint();
 			}
@@ -336,12 +339,23 @@ public class GamePlay extends JFrame implements KeyListener{
 		currPlayer = playersChars.get(currPlayerInx);
 		currPlayerLabel.setText("Jogador: " + currPlayer.nome);
 		playerInfo.setPlayerInfo(currPlayer.getCards(), currPlayer.getNotes());
+		if(currPlayer.accusedLastRound!=-1){
+			int dir = currPlayer.accusedLastRound;
+			currPlayer.accusedLastRound = -1;
+			int dialogButton = JOptionPane.YES_NO_OPTION;
+			int dialogResult = JOptionPane.showConfirmDialog(this, "Fará palpite?", "Foi acusado na ultima rodada!", dialogButton);
+			System.out.println("vai ser: "  + dialogButton);
+			
+			if(dialogResult==0){
+				suggestionRoutine(dir);
+			}
+		}
 	}
 	
 	void movePlayerOut(int exit_num){ 
 		int currRoom =currPlayer.room;
 		Room r = rooms[currRoom];	
-		r.qt-=1;
+		
 		Exit exit = r.hasExit(exit_num);
 		boolean hasPlayer = false;
 		for( int i =0; i < playersChars.size(); i++){
@@ -350,74 +364,105 @@ public class GamePlay extends JFrame implements KeyListener{
 					hasPlayer = true;
 		}
 		if(!hasPlayer){
+			r.qt-=1;
 			currPlayer.room = Path.FLOOR;
 			currPlayer.setPosition(exit.saidaX, exit.saidaY);
 			board.remove(currPlayer);
 			board.setCell(currPlayer);
-			changePlayer();
+		
 		}else{
-			System.out.println("ja tem jogador");
+			 JOptionPane.showMessageDialog(this, "Já tem jogador");
 		}
 		revalidate();
 		repaint();
 	}
 	
-	void suggestionRoutine(){
-		Suggest s = new Suggest();
+	void suggestionRoutine(int dir){
+		Suggest s = new Suggest(false);
 		s.enviar.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("passou3");
 				String who = s.getWho();
-				String where = s.getWhere();
+				String where = rooms[currPlayer.room].name;
 				String weapon = s.getWeapon();
-				System.out.println(who + " "+  where + " " + weapon);
-				boolean breaked = false;
+				
+//				System.out.println(who + " " + where +" " + weapon );
+				boolean breaked_accusation = false;
+				boolean breaked_move_player = false;
 				for(Player p : playersChars){
 					if(p.nome!=currPlayer.nome){
 						ArrayList<Card> cs = p.getCards();
-						System.out.println("nome " +p.nome);
-						for(int i =0 ; i<cs.size(); i++){
+//						System.out.println("nome " +p.nome);
+						for(int i =0 ; i<cs.size() && !breaked_move_player; i++){
 							Card c = cs.get(i);
-							if(who==c.name){
+							if(who.equals(c.name)){
 								currPlayer.addNotes(who);
-								breaked = true;
+								breaked_accusation= true;
 								break;
 								
 							}
-							else if(where==c.name){
+							if(where.equals(c.name)){	
 								currPlayer.addNotes(where);
-								breaked = true;
+								breaked_accusation = true;
 								break;
+								
 							}
-							else if(weapon==c.name){
+							else if(weapon.equals(c.name)){
 								currPlayer.addNotes(weapon);
-								breaked = true;
+								breaked_accusation = true;
 								break;
 							}
 							System.out.printf("%s ", c.name);
 						}
 						
-						if(breaked) break;
+						System.out.println(who + "-------------" + p.nome);
+						if(who.equals(p.nome)){
+							rooms[currPlayer.room].qt+=1;
+							p.setPosition(currPlayer.x, currPlayer.y);
+							p.move(dir);
+							board.remove(p);
+							board.setCell(p);
+							p.room = currPlayer.room;
+							repaint();
+							revalidate();
+							breaked_move_player = true;
+							p.accusedLastRound = dir;
+						}
+						
+						if(breaked_accusation && breaked_move_player ) break;
 					}
 				}
-				if(!breaked){
+				if(!breaked_accusation){
+					
 					int dialogButton = JOptionPane.YES_NO_OPTION;
 					int dialogResult = JOptionPane.showConfirmDialog(s, "Fará acusação?", "Ninguém se manisfestou", dialogButton);
 					if(dialogResult == 0) {
-					  System.out.println("Yes option, checando o clue");
-						 if(confidential.isAccusationTrue(who, weapon, where)){
-							 JOptionPane.showMessageDialog(s, "VOCÊ VENCEU!");
-							 System.exit(0);
-						 }
-						 else{
-							 System.out.println("Acusação FALSA!! Jogador perdeu!");
-							 JOptionPane.showMessageDialog(s, "Acusação FALSA!! Jogador perdeu!");
-							 playersChars.remove(currPlayer);
-						 }
-					 
-					  
+						
+						Suggest s = new Suggest(true);
+						s.enviar.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								// TODO Auto-generated method stub
+//								System.out.println("passou3");
+								String who = s.getWho();
+								String where = s.getWhere();
+								String weapon = s.getWeapon();
+								System.out.println("Yes option, checando o clue");
+								 if(confidential.isAccusationTrue(who, weapon, where)){
+									 JOptionPane.showMessageDialog(s, "VOCÊ VENCEU!");
+									 System.exit(0);
+								 }
+								 else{
+									 System.out.println("Acusação FALSA!! Jogador perdeu!");
+									 JOptionPane.showMessageDialog(s, "Acusação FALSA!! Jogador perdeu!");
+									 playersChars.remove(currPlayer);
+								 }
+								
+							}
+						});
 					} 
 					else {
 					  System.out.println("sem acusação, passa direto");
@@ -433,7 +478,7 @@ public class GamePlay extends JFrame implements KeyListener{
 	
 	public String getFullReport(){
 		String report = "@current:" + currPlayer.nome + "\n";
-		report +=  "@move_qt:" + currPlayer.qtMoves + "\n";
+		report +=  "@move_qt:" + qtJogadas + "\n";
 		report += "@who:" + confidential.getWho() + "\n";
 		report += "@where:" + confidential.getWhere() + "\n";
 		report += "@weapon:" + confidential.getWeapon()+ "\n";
@@ -471,5 +516,5 @@ public class GamePlay extends JFrame implements KeyListener{
 		return current.substring(inx+1);
 		
 	}
-
+	
 }
